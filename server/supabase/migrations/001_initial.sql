@@ -65,6 +65,10 @@ ALTER TABLE knowledge_blocks ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Users can CRUD own knowledge blocks" ON knowledge_blocks
     FOR ALL USING (auth.uid() = user_id);
 
+-- Allow anyone to insert knowledge_blocks (for default blocks during registration)
+CREATE POLICY "Anyone can insert knowledge blocks" ON knowledge_blocks
+    FOR INSERT WITH CHECK (true);
+
 -- Create prompts table
 CREATE TABLE IF NOT EXISTS prompts (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -85,6 +89,10 @@ ALTER TABLE prompts ENABLE ROW LEVEL SECURITY;
 -- Users can only access their own prompts
 CREATE POLICY "Users can CRUD own prompts" ON prompts
     FOR ALL USING (auth.uid() = user_id);
+
+-- Allow anyone to insert prompts (for default prompts during registration)
+CREATE POLICY "Anyone can insert prompts" ON prompts
+    FOR INSERT WITH CHECK (true);
 
 -- Create updated_at trigger function
 CREATE OR REPLACE FUNCTION update_updated_at_column()
