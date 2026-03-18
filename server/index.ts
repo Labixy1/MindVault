@@ -3,10 +3,10 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import { createClient } from '@supabase/supabase-js';
 
-import authRoutes from './routes/auth';
-import knowledgeRoutes from './routes/knowledge';
-import promptRoutes from './routes/prompts';
-import categoryRoutes from './routes/categories';
+import authRoutes from './routes/auth.js';
+import knowledgeRoutes from './routes/knowledge.js';
+import promptRoutes from './routes/prompts.js';
+import categoryRoutes from './routes/categories.js';
 
 dotenv.config();
 
@@ -17,10 +17,18 @@ const PORT = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.json());
 
+// Ensure environment variables are loaded
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_SERVICE_KEY;
+
+if (!supabaseUrl || !supabaseKey) {
+  console.error('Missing Supabase environment variables!');
+}
+
 // Initialize Supabase client
 export const supabase = createClient(
-  process.env.SUPABASE_URL || '',
-  process.env.SUPABASE_SERVICE_KEY || ''
+  supabaseUrl || 'https://placeholder.supabase.co',
+  supabaseKey || 'placeholder'
 );
 
 // Routes
